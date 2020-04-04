@@ -84,7 +84,8 @@ RUN apt-get update && apt-get install -q -y --no-install-recommends \
         libxml2-dev \
 	libxpm-dev \
 	libvpx-dev \
-	ssmtp mailutils
+	ssmtp mailutils \
+	procps
 
 # https://bugs.php.net/bug.php?id=49876
 RUN ln -fs /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/

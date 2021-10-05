@@ -1,54 +1,48 @@
-FROM php:5.6-fpm	
+FROM php:5.6-fpm
+WORKDIR /var/www
 
-WORKDIR /var/www	
-
- # Additional extensions	
-RUN apt-get update \	
-    && apt-get install -y unzip \	
-        # for intl extension	
-        libicu-dev \	
-        # for mcrypt extension	
-        libmcrypt-dev \	
-        # for mongodb	
-        libssl-dev \	
-        # for rabbit mq	
-        librabbitmq-dev \	
-        # for zero mq	
-        libsodium-dev \	
-        # for memcached	
-        libmemcached-dev \	
-        # for postgres	
-        libpq-dev \	
-        # for soap	
-        libxml2 \	
-        libxml2-dev \	
+# Additional extensions
+RUN apt-get update \
+    && apt-get install -y unzip \
+        ca-certificates \
+        libicu-dev \
+        libmcrypt-dev \
+        libssl-dev \
+        librabbitmq-dev \
+        libsodium-dev \
+        libmemcached-dev \
+        libpq-dev \
+        libxml2 \
+        libxml2-dev \
 	zlib1g-dev \
 	libmcrypt4 \
-    && pecl install amqp \	
-    && pecl install memcached-2.2.0 \	
-    && pecl install redis-2.2.8 \	
-    && docker-php-ext-configure bcmath --enable-bcmath \	
-    && docker-php-ext-configure intl --enable-intl \	
-    && docker-php-ext-configure pcntl --enable-pcntl \	
-    && docker-php-ext-configure pdo_mysql --with-pdo-mysql \	
-    && docker-php-ext-configure pdo_pgsql --with-pgsql \	
-    && docker-php-ext-configure mbstring --enable-mbstring \	
-    && docker-php-ext-configure soap --enable-soap \	
-    && docker-php-ext-install \	
-        bcmath \	
-        intl \	
-        mcrypt \	
-        pcntl \	
-        pdo_mysql \	
-        pdo_pgsql \	
-        mbstring \	
-        soap
+    && pecl install amqp \
+    && pecl install memcached-2.2.0 \
+    && pecl install redis-2.2.8 \
+    && docker-php-ext-configure bcmath --enable-bcmath \
+    && docker-php-ext-configure intl --enable-intl \
+    && docker-php-ext-configure pcntl --enable-pcntl \
+    && docker-php-ext-configure pdo_mysql --with-pdo-mysql \
+    && docker-php-ext-configure pdo_pgsql --with-pgsql \
+    && docker-php-ext-configure mbstring --enable-mbstring \
+    && docker-php-ext-configure soap --enable-soap \
+    && docker-php-ext-install \
+        bcmath \
+        intl \
+        mcrypt \
+        pcntl \
+        pdo_mysql \
+        pdo_pgsql \
+        mbstring \
+        soap \
+    && sed -i '/^mozilla\/DST_Root_CA_X3/s/^/!/' /etc/ca-certificates.conf \
+    && update-ca-certificates -f
 
- # Possible values for ext-name:	
-# bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo filter ftp gd gettext gmp hash iconv imap interbase intl	
-# json ldap mbstring mcrypt mssql mysql mysqli oci8 odbc opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql pdo_oci	
-# pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode reflection session shmop simplexml snmp soap	
-# sockets spl standard sybase_ct sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlreader xmlrpc xmlwriter xsl zip	
+# Possible values for ext-name:
+# bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo filter ftp gd gettext gmp hash iconv imap interbase intl
+# json ldap mbstring mcrypt mssql mysql mysqli oci8 odbc opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql pdo_oci
+# pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode reflection session shmop simplexml snmp soap
+# sockets spl standard sybase_ct sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlreader xmlrpc xmlwriter xsl zip
 
 RUN apt-get update && apt-get install -q -y --no-install-recommends \
         git \
@@ -108,12 +102,18 @@ RUN echo "Installing PHP extensions" \
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 ENV PATH /root/.composer/vendor/bin:$PATH
 
- # Copy configuration	
-COPY config/php.ini /usr/local/etc/php/	
-COPY config/amqp.ini /usr/local/etc/php/conf.d/	
-COPY config/fpm/php-fpm.conf /usr/local/etc/	
-COPY config/fpm/pool.d /usr/local/etc/pool.d	
-COPY config/redis.ini /usr/local/etc/php/conf.d/	
+ # Copy configuration
+
+COPY config/php.ini /usr/local/etc/php/
+
+COPY config/amqp.ini /usr/local/etc/php/conf.d/
+
+COPY config/fpm/php-fpm.conf /usr/local/etc/
+
+COPY config/fpm/pool.d /usr/local/etc/pool.d
+
+COPY config/redis.ini /usr/local/etc/php/conf.d/
+
 COPY config/memcached.ini /usr/local/etc/php/conf.d/
 
 # Clean up, try to reduce image size (much as you can on Debian..)

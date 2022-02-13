@@ -86,7 +86,7 @@ RUN ln -fs /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/
 
 #    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-xpm-dir=/usr/include/ --enable-gd-jis-conv \
 RUN echo "Installing PHP extensions" \
-    && pecl install imagick \
+    && pecl install imagick mongo \
     && docker-php-ext-configure gd  \
     --with-freetype-dir=/usr/lib/x86_64-linux-gnu/ \
     --with-jpeg-dir=/usr/lib/x86_64-linux-gnu/ \
@@ -95,7 +95,7 @@ RUN echo "Installing PHP extensions" \
     --with-png-dir=/usr/lib/x86_64-linux-gnu/ \
     --enable-gd-jis-conv \
     && docker-php-ext-install iconv mcrypt pdo_mysql pdo_pgsql pdo_sqlite pcntl zip bcmath simplexml xmlrpc soap pspell ldap mbstring mysql mysqli zip sockets bz2 gettext gd \
-    && docker-php-ext-enable  iconv mcrypt pdo_mysql pdo_pgsql pdo_sqlite pcntl zip bcmath simplexml xmlrpc soap pspell ldap mbstring mysql mysqli zip sockets bz2 gettext imagick gd \
+    && docker-php-ext-enable  iconv mcrypt mongo pdo_mysql pdo_pgsql pdo_sqlite pcntl zip bcmath simplexml xmlrpc soap pspell ldap mbstring mysql mysqli zip sockets bz2 gettext imagick gd \
     && ldconfig
 
 # install composer

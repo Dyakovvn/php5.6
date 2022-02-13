@@ -116,8 +116,6 @@ COPY config/redis.ini /usr/local/etc/php/conf.d/
 
 COPY config/memcached.ini /usr/local/etc/php/conf.d/
 
-COPY config/mongodb.ini /usr/local/etc/php/conf.d/
-
 # Clean up, try to reduce image size (much as you can on Debian..)
 RUN apt-get autoremove -y \
 && apt-get clean all \

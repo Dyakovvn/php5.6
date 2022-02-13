@@ -94,8 +94,8 @@ RUN echo "Installing PHP extensions" \
     --with-vpx-dir=/usr/lib/x86_64-linux-gnu/ \
     --with-png-dir=/usr/lib/x86_64-linux-gnu/ \
     --enable-gd-jis-conv \
-    && docker-php-ext-install iconv mcrypt pdo_mysql pdo_pgsql pcntl zip bcmath simplexml xmlrpc soap pspell ldap mbstring mysql mysqli zip sockets bz2 gettext gd \
-    && docker-php-ext-enable  iconv mcrypt pdo_mysql pdo_pgsql pcntl zip bcmath simplexml xmlrpc soap pspell ldap mbstring mysql mysqli zip sockets bz2 gettext imagick gd \
+    && docker-php-ext-install iconv mcrypt pdo_mysql pdo_pgsql pdo_sqlite pcntl zip bcmath simplexml xmlrpc soap pspell ldap mbstring mysql mysqli zip sockets bz2 gettext gd \
+    && docker-php-ext-enable  iconv mcrypt pdo_mysql pdo_pgsql pdo_sqlite pcntl zip bcmath simplexml xmlrpc soap pspell ldap mbstring mysql mysqli zip sockets bz2 gettext imagick gd \
     && ldconfig
 
 # install composer
